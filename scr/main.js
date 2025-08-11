@@ -3,7 +3,7 @@ import { RegionBehaviorCards } from "./region.js";
 const MODULE_ID = "regional-deck-draw";
 const TYPE = `${MODULE_ID}.spawnCards`;
 
-Hooks.once("ready", () => {
+Hooks.once("init", () => {
  
 
   CONFIG.RegionBehavior.dataModels[TYPE] = RegionBehaviorCards;

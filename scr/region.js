@@ -1,41 +1,47 @@
 const MODULE_ID = "regional-deck-draw";
 
-const cardsSchema = {
-  deckId: new foundry.data.fields.ArrayField(new foundry.data.fields.StringField({ required: true }),{
-    required: true,
-    initial:[],
+/**
+ * Tworzy pole wyboru talii z aktualnej listy kart w grze
+ */
+function createDeckSelectField() {
+  return new foundry.data.fields.StringField({
+    required: false,
     label: "RDD.Regions.spawnCards.FIELDS.deckId.label",
-    hint: "RDD.Regions.spawnCards.FIELDS.deckId.hint"
-  }),
+    hint: "RDD.Regions.spawnCards.FIELDS.deckId.hint",
+    choices: () => {
+      const decks = {};
+      for (const deck of game.cards) {
+        decks[deck.id] = deck.name;
+      }
+      return decks;
+    }
+  });
+}
+
+
+const cardsSchema = {
+  deckId: createDeckSelectField(),
   cardCount: new foundry.data.fields.NumberField({
     required: true,
     integer: true,
     min: 1,
     initial: 1,
     label: "RDD.Regions.spawnCards.FIELDS.cardCount.label",
-  }),
+  })
 };
 
 export class RegionBehaviorCards extends foundry.data.regionBehaviors.RegionBehaviorType {
   static type = `${MODULE_ID}.spawnCards`;
-
   static LOCALIZATION_PREFIXES = ["RDD.Regions.spawnCards"];
-  
+
   static defineSchema() {
-    const allWorldDeck = game.cards; // This is a Collection of Card documents
-    const decks = {};
-    for (const deck of allWorldDeck) {
-      decks[deck.id] = [deck.name];
-    }
-   cardsSchema.deckId.initial = decks;
     return {
       events: this._createEventsField({
         events: [
-          CONST.REGION_EVENTS.TOKEN_ENTER,
-          // dodaj inne eventy, jeśli chcesz
+          CONST.REGION_EVENTS.TOKEN_ENTER
         ],
       }),
-      ...cardsSchema,
+      ...cardsSchema
     };
   }
 
@@ -51,37 +57,49 @@ export class RegionBehaviorCards extends foundry.data.regionBehaviors.RegionBeha
     return "fa-solid fa-cards";
   }
 
-  get system() {
-    return {
-      ...super.system,
-      type: this.constructor.type,
-    };
-  }
-
   async _handleRegionEvent(event) {
     if (!event.user.isSelf) return;
 
     const token = event.data?.token;
     if (!token) return;
 
-    // Użyj bezpośrednio this.deckId lub fallback na this.data.deckId
     const deckId = this.deckId ?? this.data.deckId;
     const count = this.cardCount ?? this.data.cardCount;
 
-    console.log(`Token ${token.name} triggered card spawn in region: ${this.region.document.name}`);
+    console.log(`Token ${token.name} triggered card spawn in region: ${this.region.name}`);
     console.log(`Deck ID: ${deckId}, cards to draw: ${count}`);
 
-    // Tu dodaj logikę losowania kart i efektów
+    const fullyCoveredSquares = this.getFullyContainedGridSquares(this.region);
+    console.log("Squares fully inside region:", fullyCoveredSquares);
   }
-  static  getDeck() {
-  const allWorldDeck = game.cards; // This is a Collection of Card documents
+  _getTerrainEffects() {
+    return []; // lub inna odpowiednia wartość zgodnie z API Foundry
+  }
+  async getFullyContainedGridSquares(region) {
+  const grid = canvas.grid;
+  const shape = region.shapes; 
+  console.log(shape)
+  const bounds = shape.bounds;  // prostokąt ograniczający region
 
-  const decks = {};
+  // Pobierz zakres krat w siatce zawartych w bounding box
+  const offsetRange = grid.getOffsetRange(bounds);
 
-  for (const deck of allWorldDeck) {
-    decks[deck.id] = deck.name;
+  const containedCells = [];
+
+  // offsetRange to {x, y, width, height} (kolumny i rzędy)
+  for (let row = offsetRange.y; row < offsetRange.y + offsetRange.height; row++) {
+    for (let col = offsetRange.x; col < offsetRange.x + offsetRange.width; col++) {
+      // pobierz wierzchołki kratki
+      const verts = grid.getVertices({x: col, y: row});
+      // sprawdź, czy każdy wierzchołek jest w regionie
+      const fullyInside = verts.every(pt => shape.contains(pt));
+      if (fullyInside) {
+        containedCells.push({x: col, y: row});
+      }
+    }
   }
 
-  return decks;
+  return containedCells;
 }
+
 }
