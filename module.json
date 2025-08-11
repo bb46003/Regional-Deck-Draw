@@ -1,0 +1,41 @@
+{
+  "id": "regional-deck-draw",
+  "title": "Regional Deck Draw",
+  "version": "1.0",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "13"
+    },
+    "authors": [
+      {
+        "name": "Bartek",
+        "discord": "bartek6199",
+        "flags": {}
+      }
+    ],
+    "esmodules": [
+      "/scr/main.js"
+    ],
+ "documentTypes": {
+    "RegionBehavior": {
+      "spawnCards":{}
+  }
+ },
+    "languages": [
+      {
+        "lang": "pl",
+        "name": "Polski",
+        "path": "/lang/pl.json",
+        "flags": {}
+      },
+
+      {
+          "lang": "en",
+        "name": "English",
+        "path": "/lang/en.json",
+        "flags": {}
+      }
+    ]
+
+
+  }
