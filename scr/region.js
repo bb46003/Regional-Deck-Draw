@@ -1,26 +1,17 @@
 const MODULE_ID = "regional-deck-draw";
 
-/**
- * Tworzy pole wyboru talii z aktualnej listy kart w grze
- */
-function createDeckSelectField() {
-  return new foundry.data.fields.StringField({
-    required: false,
-    label: "RDD.Regions.spawnCards.FIELDS.deckId.label",
-    hint: "RDD.Regions.spawnCards.FIELDS.deckId.hint",
-    choices: () => {
-      const decks = {};
-      for (const deck of game.cards) {
-        decks[deck.id] = deck.name;
-      }
-      return decks;
-    }
-  });
-}
+
+
 
 
 const cardsSchema = {
-  deckId: createDeckSelectField(),
+  deckId: new foundry.data.fields.StringField({
+      required: true,
+      initial: "", 
+      label: "RDD.Regions.spawnCards.FIELDS.deckId.label",
+      hint: "RDD.Regions.spawnCards.FIELDS.deckId.hint"
+    }
+  ),
   cardCount: new foundry.data.fields.NumberField({
     required: true,
     integer: true,
@@ -37,9 +28,7 @@ export class RegionBehaviorCards extends foundry.data.regionBehaviors.RegionBeha
   static defineSchema() {
     return {
       events: this._createEventsField({
-        events: [
-          CONST.REGION_EVENTS.TOKEN_ENTER
-        ],
+        events: 'combatStarted',
       }),
       ...cardsSchema
     };
@@ -58,17 +47,10 @@ export class RegionBehaviorCards extends foundry.data.regionBehaviors.RegionBeha
   }
 
   async _handleRegionEvent(event) {
-    if (!event.user.isSelf) return;
-
-    const token = event.data?.token;
-    if (!token) return;
-
+    console.log(event)
     const deckId = this.deckId ?? this.data.deckId;
     const count = this.cardCount ?? this.data.cardCount;
-
-    console.log(`Token ${token.name} triggered card spawn in region: ${this.region.name}`);
     console.log(`Deck ID: ${deckId}, cards to draw: ${count}`);
-
     const fullyCoveredSquares = this.getFullyContainedGridSquares(this.region);
     console.log("Squares fully inside region:", fullyCoveredSquares);
   }

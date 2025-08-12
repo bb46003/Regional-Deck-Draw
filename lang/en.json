@@ -1,7 +1,7 @@
 {
   "RDD": {
     "newBehavior": "Spawn Cards icon on Combat Start",
-    "settingTooltip": "When combat starts in this region, draw cards from a selected deck and place them on the map.",  
+    "settingTooltip": "When combat starts in this region, draw cards from a selected deck and place them on the map.",
     "Regions": {
       "spawnCards": {
         "FIELDS": {
@@ -9,12 +9,12 @@
             "label": "Pick your deck",
             "hint": "Select card Deck from wich you will draw Card at beggining of Combat"
           },
-          "cardCount":{
-            "label":"How many Card you want to draw?"
+          "cardCount": {
+            "label": "How many Card you want to draw?"
           }
         }
       }
-    }
+    },
+    "combatStartedLabel": "Combat Start/End"
   }
 }
-  

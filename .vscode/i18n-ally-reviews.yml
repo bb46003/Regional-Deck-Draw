@@ -1352,3 +1352,15 @@ reviews:
             suggestion: ''
             type: approve
             time: '2025-08-11T06:51:23.585Z'
+  RDD.combatStartedLabel:
+    locales:
+      en:
+        comments:
+          - user:
+              name: Unknown
+              email: ''
+            id: qAtDqpFE6xG6q791wL16Z
+            comment: ''
+            suggestion: ''
+            type: approve
+            time: '2025-08-12T07:44:24.422Z'
