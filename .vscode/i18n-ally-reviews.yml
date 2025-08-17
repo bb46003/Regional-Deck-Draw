@@ -1364,3 +1364,27 @@ reviews:
             suggestion: ''
             type: approve
             time: '2025-08-12T07:44:24.422Z'
+  RDD.pleaseInsertCorrectUUid:
+    locales:
+      en:
+        comments:
+          - user:
+              name: Unknown
+              email: ''
+            id: tabsJ2jbSj6Ncmwxhqqr8
+            comment: ''
+            suggestion: ''
+            type: approve
+            time: '2025-08-17T15:29:34.218Z'
+  RDD.inncorectNumberOfCard:
+    locales:
+      en:
+        comments:
+          - user:
+              name: Unknown
+              email: ''
+            id: hG1DEfkxj21YNdR9PBMIn
+            comment: ''
+            suggestion: ''
+            type: approve
+            time: '2025-08-17T15:38:51.138Z'

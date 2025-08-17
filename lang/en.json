@@ -15,6 +15,9 @@
         }
       }
     },
-    "combatStartedLabel": "Combat Start/End"
+    "combatStartedLabel": "Combat Start/End",
+    "pleaseInsertCorrectUUid": "Please copy correct UUID of card Deck, it should contain - Card.16 random character.",
+    "inncorectNumberOfCard": "Please insert number od roll forumla.",
+    "thereWillBeDrownXCard": "There will be drawed {roll} Cards from {deck}"
   }
 }
