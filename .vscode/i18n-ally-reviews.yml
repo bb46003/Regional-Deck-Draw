@@ -1388,3 +1388,27 @@ reviews:
             suggestion: ''
             type: approve
             time: '2025-08-17T15:38:51.138Z'
+  RDD.useCard:
+    locales:
+      en:
+        comments:
+          - user:
+              name: Unknown
+              email: ''
+            id: Eu80VGAMVDPIO8jhBrSX2
+            comment: ''
+            suggestion: ''
+            type: approve
+            time: '2025-08-17T20:45:38.726Z'
+  RDD.cardWasUsed:
+    locales:
+      en:
+        comments:
+          - user:
+              name: Unknown
+              email: ''
+            id: MhulH38asPZRsNcbm6-Cq
+            comment: ''
+            suggestion: ''
+            type: approve
+            time: '2025-08-17T21:15:28.021Z'

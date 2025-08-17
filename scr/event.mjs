@@ -13,7 +13,8 @@ export const registerEvents = () => {
       try {
         await behavior._handleRegionEvent({
           name: "combatStarted",
-          data: true,
+          data: {start:true,
+            combatID: combat.id},
           region,
           user: game.user ?? (() => { throw new Error("No active user found."); })(),
         });
@@ -35,7 +36,8 @@ Hooks.on("deleteCombat", async (combat) => {
       try {
         await behavior._handleRegionEvent({
           name: "combatStarted",
-          data: false,
+          data:  {start:false,
+            combatID: combat.id},
           region,
           user: game.user ?? (() => { throw new Error("No active user found."); })(),
         });

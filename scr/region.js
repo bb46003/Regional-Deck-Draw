@@ -4,34 +4,32 @@ const cardPattern =  /Cards\./;
 const numberOrDice = /^(\d+|d\d+|\d+d\d+)$/;
 const cardsSchema = {
   deckId: new foundry.data.fields.StringField({
-      required: true,
-      initial: "", 
-      validator: (value) => {
-        if (!cardPattern.test(value)) {
-          ui.notifications.warn(
-          game.i18n.localize("RDD.pleaseInsertCorrectUUid"),
-          );
-        }
-        return true;
-      },
-      label: "RDD.Regions.spawnCards.FIELDS.deckId.label",
-      hint: "RDD.Regions.spawnCards.FIELDS.deckId.hint"
+  required: true,
+  initial: "",
+  label: "RDD.Regions.spawnCards.FIELDS.deckId.label",
+  hint: "RDD.Regions.spawnCards.FIELDS.deckId.hint",
+  validator: (value) => {
+    if (!cardPattern.test(value)) {
+        ui.notifications.warn(game.i18n.localize("RDD.pleaseInsertCorrectUUid"));
+      return false
     }
-  ),
+    return true;
+  }
+}),
   cardCount: new foundry.data.fields.StringField({
-    required: true,
-         validator: (value) => {
-        if (!numberOrDice.test(value)) {
-          ui.notifications.warn(
-          game.i18n.localize("RDD.inncorectNumberOfCard"),
-          );
-        }
-        return true;
-      },
-    placeholder: "Insert number or roll formula eg. 1d6, d3 ",
-    initial: "",
-    label: "RDD.Regions.spawnCards.FIELDS.cardCount.label",
-  })
+  required: true,
+  initial: "",
+  label: "RDD.Regions.spawnCards.FIELDS.cardCount.label",
+  hint: "RDD.Regions.spawnCards.FIELDS.cardCount.hint",
+  validator: (value) => {
+    if (!numberOrDice.test(value)) {
+      ui.notifications.warn(game.i18n.localize("RDD.inncorectNumberOfCard"))
+      return false
+    }
+    return true;
+  },
+  validationError: "",
+})
 };
 
 export class RegionBehaviorCards extends foundry.data.regionBehaviors.RegionBehaviorType {
@@ -40,9 +38,7 @@ export class RegionBehaviorCards extends foundry.data.regionBehaviors.RegionBeha
 
   static defineSchema() {
     return {
-      events: this._createEventsField({
-        value: 'combatStarted',
-      }),
+       events: this._createEventsField({ events: 'combatStarted', }),
       ...cardsSchema
     };
   }
@@ -62,7 +58,7 @@ export class RegionBehaviorCards extends foundry.data.regionBehaviors.RegionBeha
 async _handleRegionEvent(event) {
   console.log(event);
 
-  // Get deck
+  if(event.data.start){
   const deckId = this.deckId ?? this.data.deckId;
   const deck = await fromUuid(deckId);    
 
@@ -96,16 +92,33 @@ async _handleRegionEvent(event) {
 
   // Permissions for everyone
   const permission = { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER };
-   const journal = await JournalEntry.create({
-    name: `Deck: ${deck.name}`,
+const journal = await JournalEntry.create({
+  name: `Deck: ${deck.name}`,
+  ownership: permission,
+  flags: {
+    "regional-deck-draw": {
+      combat: event.data.combatID
+    }
+  },
+  pages: cards.map((card, i) => ({
+    name: `Card ${i + 1}`,
+    type: "text",
+    text: {
+      content: `<a class="useCard" style="font-size:40px" data-pageName="Card ${i + 1}"
+         data-img="${card.faces[0].img}">${game.i18n.localize("RDD.useCard")}</a><br>
+      <img src="${card.faces[0].img}" style="width:100%; height:auto;">`
+    },
+    sort: i,
     ownership: permission,
-    pages: cards.map((card, i) => ({
-      name: `Card ${i + 1}`,
-      type: "text",
-      img: card.faces[0].img,
-      content: `<img src="${card.faces[0].img}" style="width:100%; height:auto;">`
-    }))
-  });
+    flags: {
+      "regional-deck-draw": {
+        cardId: card.id,
+        index: i
+      }
+    },
+    system: {}
+  }))
+});
 
   // Create a journal entry for each card
 
@@ -115,22 +128,45 @@ async _handleRegionEvent(event) {
 for (let i = 0; i < cards.length; i++) {
   const cellIndex = randomLocalization[i]; // array index
   const cell = cells[cellIndex];
-
-  const page = pages.contents[i]; // get the JournalEntryPage document
+  const page = pages.contents[i];           // JournalEntryPage document
 
   await NoteDocument.create({
-    x: cell.x,
-    y: cell.y,
+     flags: {
+    "regional-deck-draw": {
+      jurnalPageID: page.id,
+      combat: event.data.combatID
+    }},
+    x: cell.x + canvas.grid.size/2,
+    y: cell.y + canvas.grid.size/2,
     icon: cards[i].faces[0].img,
     entryId: journal.id,
-    pageId: page.id,           // reference the embedded page
+    pageId: page.id,
     label: `Card ${i + 1}`,
     iconSize: canvas.grid.size,
     iconTint: "#FFFFFF",
     textColor: "#000000",
     fontSize: 12,
     fontFamily: "Signika",
-  });
+    texture:{src:deck.img},
+  }, { parent: canvas.scene });
+}
+  }
+  else{
+    const notes = canvas.notes.placeables;
+        for (let note of notes) {
+          const combatFlag = note.document.getFlag("regional-deck-draw", "combat");
+          if (combatFlag === event.data.combatID) {
+            await note.document.delete();
+          }
+        }
+    const jurnals = game.journal;
+    for (let jurnal of jurnals) {
+          const combatFlag = jurnal.getFlag("regional-deck-draw", "combat");
+          if (combatFlag === event.data.combatID) {
+            await jurnal.delete();
+          }
+        }
+
   }
 }
 
