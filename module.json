@@ -5,37 +5,41 @@
   "compatibility": {
     "minimum": "12",
     "verified": "13"
-    },
-    "authors": [
-      {
-        "name": "Bartek",
-        "discord": "bartek6199",
-        "flags": {}
-      }
-    ],
-    "esmodules": [
-      "/scr/main.js"
-    ],
- "documentTypes": {
+  },
+  "authors": [
+    {
+      "name": "Bartek",
+      "discord": "bartek6199",
+      "flags": {}
+    }
+  ],
+  "esmodules": ["/scr/main.js"],
+  "documentTypes": {
     "RegionBehavior": {
-      "spawnCards":{}
-  }
- },
-    "languages": [
-      {
-        "lang": "pl",
-        "name": "Polski",
-        "path": "/lang/pl.json",
-        "flags": {}
-      },
+      "spawnCards": {}
+    }
+  },
+  "languages": [
+    {
+      "lang": "pl",
+      "name": "Polski",
+      "path": "/lang/pl.json",
+      "flags": {}
+    },
 
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "/lang/en.json",
+      "flags": {}
+    }
+  ],
+  "relationships": {
+    "requires": [
       {
-          "lang": "en",
-        "name": "English",
-        "path": "/lang/en.json",
-        "flags": {}
+        "id": "lib-wrapper",
+        "type": "module"
       }
     ]
-
-
   }
+}

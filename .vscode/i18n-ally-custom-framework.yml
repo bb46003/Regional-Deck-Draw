@@ -22,10 +22,6 @@ usageMatchRegex:
   - "\\{\\{\\s*localize\\s+[\"']({key})['\"]\\s*\\}\\}"
   - "\\{\\{[\\w\\.\\s\\=]*\\(localize\\s+[\"']({key})['\"]\\)[\\w\\.\\s\\=]*\\}\\}"
   - "data-tooltip\\=[\"']({key})['\"]"
-  
-
-
-
 
 # If set to true, only enables this custom framework (will disable all built-in frameworks)
 monopoly: true
