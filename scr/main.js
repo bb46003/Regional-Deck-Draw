@@ -16,6 +16,12 @@ Hooks.once("init", () => {
 Hooks.on("renderJournalEntrySheet", (sheet, element) => {
   const flag = sheet.document?.flags["regional-deck-draw"];
   if (flag !== undefined) {
+
+    const jurnalSideBar = element.querySelector(".sidebar.journal-sidebar.flexcol");
+    jurnalSideBar.style.display = "none";
+      sheet.position.width =400;
+    sheet.setPosition(sheet.position);
+  
     const useElements = element.querySelectorAll(".useCard");
 
     useElements.forEach((btn) => {
@@ -31,7 +37,7 @@ Hooks.on("renderJournalEntrySheet", (sheet, element) => {
         const pageId = page.id;
 
         await page.delete();
-
+        sheet.close()
         ChatMessage.create({
           content: `<div class="card-played">
                       <p><strong>${game.i18n.localize("RDD.cardWasUsed")}</strong></p>
@@ -105,14 +111,3 @@ Hooks.on("renderRegionBehaviorConfig", (config, element) => {
   }
 });
 
-Hooks.on("renderJournalEntrySheet",(jurnal, element)=>{
-  const flagExist = jurnal.options.document.flags["regional-deck-draw"];
-  if(flagExist !== undefined){
-    const jurnalSideBar = element.querySelector(".sidebar.journal-sidebar.flexcol");
-    jurnalSideBar.style.display = "none";
-        const sectionPage = element.querySelector(".journal-page-content");
-    sectionPage.style.width = "360px";
-    element.style.setProperty("width", "680px", "important");
-  }
-  console.log(jurnal)
-} )

@@ -108,7 +108,7 @@ export class RegionBehaviorCards extends foundry.data.regionBehaviors.RegionBeha
           name: `Card ${i + 1}`,
           type: "text",
           text: {
-      content: `<section style="display: flex; flex-direction: column; align-items: center; width: 360px;">
+      content: `<section style="display: flex; flex-direction: column; align-items: center;">
   <a class="useCard" style="font-size:40px" data-pageName="Card ${i + 1}"
      data-img="${card.faces[0].img}">${game.i18n.localize("RDD.useCard")}</a><br>
   <img src="${card.faces[0].img}" style="width:360px; height:auto;">
