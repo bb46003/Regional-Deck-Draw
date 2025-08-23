@@ -1,5 +1,35 @@
 {
   "RDD": {
-    "newBehavior": "Stwórz ikony kart na początku walki"
+    "newBehavior": "Twórz notatki kart na początku walki",
+    "settingTooltip": "Gdy walka rozpocznie się w tym regionie, losuj karty z wybranego talii i umieść je na mapie.",
+    "Regions": {
+      "spawnCards": {
+        "FIELDS": {
+          "deckId": {
+            "label": "Wybierz swoją talię",
+            "hint": "Wybierz talię kart, z której będą losowane karty na początku walki."
+          },
+          "cardCount": {
+            "label": "Ile kart chcesz wylosować?"
+          },
+          "pickUpCard": {
+            "label": "Zamiast losowo losować karty, możesz je wybrać ręcznie."
+          }
+        }
+      }
+    },
+    "combatStartedLabel": "Początek/Koniec walki",
+    "pleaseInsertCorrectUUid": "Proszę wprowadzić poprawny UUID talii kart; powinien zawierać 'Card.'",
+    "incorrectNumberOfCard": "Proszę wprowadzić poprawną formułę rzutu.",
+    "thereWillBeDrawnXCard": "Z talii {deck} zostanie wylosowanych {roll} kart.",
+    "useCard": "Użyj karty!",
+    "cardWasUsed": "Ta karta została właśnie użyta.",
+    "insertDeckUuid": "Proszę wprowadzić UUID wybranej talii, zaczynający się od 'Card.'.",
+    "insertFormulaOrNumber": "Wprowadź formułę rzutu, np. xdx, xDx lub po prostu liczbę.",
+    "caedSelector": "Wybór kart",
+    "youCanPickUpXCard": "Musisz wybrać {count} kart poniżej",
+    "selected": "Wybrane",
+    "dialogSubmit": "Zatwierdź",
+    "cardSelector": "Selektor kart"
   }
 }

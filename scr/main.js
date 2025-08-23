@@ -1,6 +1,6 @@
 import { RegionBehaviorCards } from "./region.js";
 import { registerEvents } from "./event.mjs";
-
+import { registerHandlebarsHelpers } from "./handlebars.mjs";
 const MODULE_ID = "regional-deck-draw";
 const TYPE = `${MODULE_ID}.spawnCards`;
 
@@ -9,6 +9,7 @@ Hooks.once("init", () => {
   CONFIG.RegionBehavior.typeIcons[TYPE] = RegionBehaviorCards.icon;
   CONFIG.RegionBehavior.typeLabels[TYPE] = "RDD.newBehavior";
   registerEvents();
+  registerHandlebarsHelpers();
 
   console.log(`Registered region behavior ${TYPE} via registerBehavior`);
 });
@@ -16,12 +17,11 @@ Hooks.once("init", () => {
 Hooks.on("renderJournalEntrySheet", (sheet, element) => {
   const flag = sheet.document?.flags["regional-deck-draw"];
   if (flag !== undefined) {
-
     const jurnalSideBar = element.querySelector(".sidebar.journal-sidebar.flexcol");
     jurnalSideBar.style.display = "none";
-      sheet.position.width =400;
+    sheet.position.width = 400;
     sheet.setPosition(sheet.position);
-  
+
     const useElements = element.querySelectorAll(".useCard");
 
     useElements.forEach((btn) => {
@@ -37,7 +37,7 @@ Hooks.on("renderJournalEntrySheet", (sheet, element) => {
         const pageId = page.id;
 
         await page.delete();
-        sheet.close()
+        sheet.close();
         ChatMessage.create({
           content: `<div class="card-played">
                       <p><strong>${game.i18n.localize("RDD.cardWasUsed")}</strong></p>
@@ -45,7 +45,6 @@ Hooks.on("renderJournalEntrySheet", (sheet, element) => {
                     </div>`,
           speaker: ChatMessage.getSpeaker({ user: game.user })
         });
-
 
         const notes = canvas.notes.placeables;
         for (let note of notes) {
@@ -65,14 +64,14 @@ Hooks.on("renderJournalEntrySheet", (sheet, element) => {
 
 Hooks.on("renderRegionBehaviorConfig", (config, element) => {
   if (config.options.document.type === "regional-deck-draw.spawnCards") {
-
     const cardPattern = /Cards\./;
-    const numberOrDice = /^(\d+|d\d+|\d+d\d+)$/;
+    const numberOrDice = /^(\d+|[dD]\d+|\d+[dD]\d+)$/;
 
     const deckInput = element.querySelector('input[name="system.deckId"]');
     const cardCountInput = element.querySelector('input[name="system.cardCount"]');
     const submitButton = element.querySelector('button[type="submit"]');
-
+    deckInput.placeholder = game.i18n.localize("RDD.insertDeckUuid");
+    cardCountInput.placeholder = game.i18n.localize("RDD.insertFormulaOrNumber");
     // Helper function to check validity
     const validateInputs = () => {
       const deckValid = deckInput ? cardPattern.test(deckInput.value) : true;
@@ -85,7 +84,7 @@ Hooks.on("renderRegionBehaviorConfig", (config, element) => {
 
     // Deck input blur
     if (deckInput) {
-      deckInput.addEventListener('blur', (ev) => {
+      deckInput.addEventListener("blur", (ev) => {
         const valid = cardPattern.test(ev.target.value);
         ev.target.style.border = valid ? "" : "2px solid red";
         if (!valid) ui.notifications.warn(game.i18n.localize("RDD.pleaseInsertCorrectUUid"));
@@ -93,12 +92,12 @@ Hooks.on("renderRegionBehaviorConfig", (config, element) => {
       });
 
       // Also validate while typing
-      deckInput.addEventListener('input', validateInputs);
+      deckInput.addEventListener("input", validateInputs);
     }
 
     // Card count input blur
     if (cardCountInput) {
-      cardCountInput.addEventListener('blur', (ev) => {
+      cardCountInput.addEventListener("blur", (ev) => {
         const valid = numberOrDice.test(ev.target.value);
         ev.target.style.border = valid ? "" : "2px solid red";
         if (!valid) ui.notifications.warn(game.i18n.localize("RDD.inncorectNumberOfCard"));
@@ -106,8 +105,7 @@ Hooks.on("renderRegionBehaviorConfig", (config, element) => {
       });
 
       // Also validate while typing
-      cardCountInput.addEventListener('input', validateInputs);
+      cardCountInput.addEventListener("input", validateInputs);
     }
   }
 });
-

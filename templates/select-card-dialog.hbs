@@ -1,0 +1,29 @@
+
+  <!-- Górny licznik zawsze widoczny -->
+  <section style="flex-shrink:0; overflow:visible; margin-bottom:10px;">
+<div id="selected-count" style="font-weight:bold; margin-bottom:10px;">
+  {{localize "RDD.selected"}}: 
+  <span id="selected-number">0</span> / {{count}}
+</div>
+  </section>
+
+  <!-- Pozostała część scrollowana -->
+  <section style="flex:1; overflow-y:auto;">
+    <div>
+      {{localize "RDD.youCanPickUpXCard" count=count}}
+    </div>
+
+    <form style="margin-top:10px;">
+      <div class="cards-grid" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;">
+        {{#each cards as |card|}}
+          <label style="display:flex; flex-direction:column; align-items:center; cursor:pointer; border:1px solid #ccc; padding:5px; border-radius:5px;">
+            <img src="{{card.img}}">
+            <input type="checkbox" name="selectedCards" value="{{card.id}}" style="margin-top:5px;">
+            <span>{{card.name}}</span>
+          </label>
+        {{/each}}
+      </div>
+    </form>
+  </section>
+
+
