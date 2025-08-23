@@ -1,9 +1,9 @@
 {
   "id": "regional-deck-draw",
   "title": "Regional Deck Draw",
-  "version": "1.0",
+  "version": "vDev",
   "compatibility": {
-    "minimum": "12",
+    "minimum": "13",
     "verified": "13"
   },
   "authors": [
@@ -42,4 +42,7 @@
       }
     ]
   }
+  "url": "Filled in by the release workflow",
+  "manifest": "Filled in by the release workflow",
+  "download": "Filled in by the release workflow"
 }
